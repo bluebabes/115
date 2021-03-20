@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="网盘助手 Chrome Extension">
+    <title>网盘助手 | Chrome Extension</title>
+    <!-- Styles -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/jgcpgphpmecnbepkigkioamkdiallnai">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type='text/javascript'>window._ty_rum||function(){function sf(t){switch(typeof t){case"object":if(!t)return"null";if(t instanceof Array){for(var e="[",r=0;r<t.length;r++)e+=(r>0?",":"")+sf(t[r]);return e+"]"}var e="{",r=0;for(var n in t)"function"!=typeof t[n]&&(e+=(r>0?",":"")+sf(n)+":"+sf(t[n]),r++);return e+"}";case"string":return'"'+t.replace(/([\"\\])/g,"\\$1")+'"';case"number":return t.toString();case"boolean":return t?"true":"false";case"function":return"[function]";case"undefined":default:return"undefined"}}function now(){return Date.now?Date.now():(new Date).valueOf()}function enc(t){return wd.encodeURIComponent?encodeURIComponent(t):t}function hrs(t){return function(){}}function odl(){mc.ied()}function och(){"complete"===dc.readyState&&mc.ied()}function owl(t){function e(){mc.sd()}return ty_rum.load_time?!0:(mc.ied(),ty_rum.load_time=now(),void(9===t?e():setTimeout(e,0)))}function owu(){ul||owl(9),ul=1}function ot(){mc.touch||(mc.touch=now())}function oe(t){var e=arguments,r="unknown",n=[now()];if(0!=e.length){if("string"==typeof t){var a=e.length<4?e.length:4;n[1]=e[0],a>2&&(n[2]=e[2],n[3]=0,n[4]=e[1]),a>3&&e[3]&&(n[3]=e[3])}else if(t instanceof Event&&(n[1]=t.message||(t.error&&t.error.constructor.name)+(t.error&&t.error.message)||"",n[2]=t.lineno?t.lineno:0,n[3]=t.colno?t.colno:0,n[4]=t.filename||t.error&&t.error.fileName||t.target&&t.target.baseURI||"",n[4]==dc.URL&&(n[4]="#"),n[1]===r&&n[4]===r))return;mc.e.push(n)}}function thiscall(o,m,a){for(var f="o."+m+"(",i=0;i<a.length;i++)f+=(i>0?",":"")+"a["+i+"]";return f+=");",eval(f)}function wp_open(t){return function(){var e=arguments,r=this;if(!r._ty_wrap){var n=ut.ag.apply(r,e);r._ty_rum={method:n[0],url:n[1],start:now()}}try{return t.apply(r,e)}catch(a){return r.open=t,thiscall(r,"open",e)}}}function sz(t){return"string"==typeof t?t.length:ArrayBuffer&&t instanceof ArrayBuffer?t.byteLength:Blob&&t instanceof Blob?t.size:t.length?t.length:0}function wp_send(t){return function(){function e(t){var e=u._ty_rum;if(e){if(4!==e.readyState&&(e.end=now()),e.s=u.status,e.res=sz(u.responseText),e.readyState=u.readyState,e.cb_time=s,ty_rum.aa.push([e.method+" "+e.url,e.s>0?e.end-e.start:0,s,e.s,e.s>0?0:t,e.res,e.req]),ty_rum.server.custom_urls&&ty_rum.server.custom_urls.length&&!mc.ct){if(!ty_rum.pattern){ty_rum.pattern=[];for(var r=0;r<ty_rum.server.custom_urls.length;r++)ty_rum.pattern.push(new RegExp(ty_rum.server.custom_urls[r]))}for(var r=0;r<ty_rum.pattern.length;r++)if(e.url.match(ty_rum.pattern[r])){mc.ct=e.end+s;break}}mc.sa(),u._ty_rum=null}}function r(){4==u.readyState&&e(0)}function n(t){return function(){var e;4==u.readyState&&u._ty_rum&&(u._ty_rum.end=e=now(),u._ty_rum.readyState=4);var n=t.apply(this,arguments);return 4==u.readyState&&(s=now()-e),r(),n}}function a(t){return function(){var r=u._ty_rum;return r?"progress"==t?!0:("abort"==t?e(905):"loadstart"==t?r.start=now():"error"==t?e(990):"timeout"==t&&e(903),!0):!0}}function o(t,e){e instanceof Array||(e=[e]);for(var r=0;r<e.length;r++){var n=e[r];ut.sh(t,n,a(n),!1)}}if(!this._ty_wrap){this._ty_rum.start=now(),this._ty_rum.req=arguments[0]?sz(arguments[0]):0;var u=this,s=0,i=ut.wp(!1,this,"onreadystatechange",n);i||ut.sh(this,"readystatechange",r,!1),o(this,["error","progress","abort","load","loadstart","loadend","timeout"]),i||setTimeout(function(){ut.wp(!1,u,"onreadystatechange",n)},0)}var c=arguments;try{return t.apply(this,c)}catch(m){return this.send=t,thiscall(this,"send",c)}}}var wd=window,xr=wd.XMLHttpRequest,dc=document,ty_rum=wd._ty_rum={st:now(),ra:[],aa:[],snd_du:function(){return this.server.adu?1e3*this.server.adu:1e4},cc:function(){return this.server.ac?this.server.ac:10}};ty_rum.server = {beacon:'beacon.tingyun.com',beacon_err:'beacon-err.tingyun.com',key:'tk3mSk_jvyE',trace_threshold:40000,custom_urls:[],sr:1.0};if(ty_rum.server&&!(ty_rum.server.sr&&Math.random()>=ty_rum.server.sr)){var ut={wp:function(t,e,r,n,a){var o;try{o=e[r]}catch(u){if(!t)return!1}if(!o&&!t)return!1;if(o&&o._ty_wrap)return!1;try{e[r]=n(o,a)}catch(u){return!1}return e[r]._ty_wrap=[o],!0},mu:function(t,e){var r=arguments,n=dc.URL.match(/^([a-zA-Z]+:)/)[0]+"//"+t+"/"+e+"?v=1.1.0&key="+enc(ty_rum.server.key)+"&ref="+enc(dc.URL)+"&rand="+now();if(r.length>2){var a=r[2];for(var o in a)n+="&"+o+"="+a[o]}return n},gt:function(t,e){function r(){e&&e.apply(this,arguments),n.parentNode&&n.parentNode.removeChild(n)}var n=dc.createElement("script");n.type="text/javascript",n.src=t,ut.sh(n,"readystatechange",function(){("loaded"==n.readyState||4==n.readyState)&&r(null,n.innerHTML)},!1),ut.sh(n,"load",function(){return r(null,n.innerHTML),!0},!1),ut.sh(n,"error",function(){return r("error",n.innerHTML),!0},!1);var a=dc.getElementsByTagName("script")[0];return a.parentNode.insertBefore(n,a)?n:void 0},fpt:function(t,e,r){function n(t,e,r){var n=dc.createElement(t);try{for(var a in e)n[a]=e[a]}catch(o){var u="<"+t;for(var a in e)u+=" "+a+'="'+e[a]+'"';u+=">",r||(u+="</"+t+">"),n=dc.createElement(u)}return n}var a=n("div",{style:"display:none"},!1),o=n("iframe",{name:"_ty_rum_frm",width:0,height:0,style:"display:none"},!1),u=n("form",{style:"display:none",action:t,enctype:"application/x-www-form-urlencoded",method:"post",target:"_ty_rum_frm"},!1),s=n("input",{name:"err",type:"hidden"},!0);return s.value=e,u.appendChild(s),a.appendChild(o),a.appendChild(u),dc.body.appendChild(a),u.submit(),o.onreadystatechange=function(){("complete"===o.readyState||4===o.readyState)&&(r(null,o.innerHTML),dc.body.removeChild(a))},!0},pt:function(t,e,r,n){if(navigator&&navigator.sendBeacon)return navigator.sendBeacon(t,e);if(ut.ie)return ut.fpt(t,e,n);var a;if(wd.XDomainRequest)return a=new XDomainRequest,a.open("POST",t),a.onload=function(){n(null,a.responseText)},ut.sh(a,"load",function(){n(null,a.responseText)},!1),ut.sh(a,"error",function(){n("POST("+t+")error")},!1),ut.wp(!0,a,"onerror",function(t){return function(){return n&&n("post error",a.responseText),!0}}),a.send(e),!0;if(!xr)return!1;a=new xr,a.overrideMimeType&&a.overrideMimeType("text/html");try{a._ty_wrap=1}catch(o){}var u=0;a.onreadystatechange=function(){4==a.readyState&&200==a.status&&(0==u&&n(null,a.responseText),u++)},a.onerror&&ut.wp(!0,a,"onerror",function(t){return function(){return n("post error",a.responseText),"function"==typeof t?t.apply(this,arguments):!0}});try{a.open("POST",t,!0)}catch(o){return ut.fpt(t,e,n)}for(var s in r)a.setRequestHeader(s,r[s]);return a.send(e),!0},sh:function(t,e,r,n){return t.addEventListener?t.addEventListener(e,r,n):t.attachEvent?t.attachEvent("on"+e,r):!1},ag:function(){for(var t=[],e=0;e<arguments.length;e++)t.push(arguments[e]);return t}},pf=wd.performance?wd.performance:wd.Performance;pf&&(ut.sh(pf,"resourcetimingbufferfull",function(){var t=pf.getEntriesByType("resource");t&&(ty_rum.ra=ty_rum.ra.concat(t),pf.clearResourceTimings())},!1),ut.sh(pf,"webkitresourcetimingbufferfull",function(){var t=pf.getEntriesByType("resource");t&&(ty_rum.ra=ty_rum.ra.concat(t),pf.webkitClearResourceTimings())},!1));for(var mc=ty_rum.mc={rd:function(){return ty_rum.load_time},ied:function(){function t(){mc.sa()}ty_rum.end_time||(ty_rum.end_time=now(),mc._h=setInterval(t,2e3))},sd:function(){function t(){function t(t){return n[t]>0?n[t]-r:0}var e={};if(pf&&pf.timing){var n=pf.timing;r=n.navigationStart;var a=t("domainLookupStart"),o=t("domainLookupEnd"),u=t("redirectStart"),s=t("redirectEnd"),i=t("connectStart"),c=t("connectEnd");e={f:t("fetchStart"),qs:t("requestStart"),rs:t("responseStart"),re:t("responseEnd"),os:t("domContentLoadedEventStart"),oe:t("domContentLoadedEventEnd"),oi:t("domInteractive"),oc:t("domComplete"),ls:t("loadEventStart"),le:t("loadEventEnd")},c-i>0&&(e.cs=i,e.ce=c),o-a>0&&(e.ds=a,e.de=o),(s-u>0||s>0)&&(e.es=u,e.ee=s),0==e.le&&(e.ue=ty_rum.load_time-r);var m;if(n.msFirstPaint)m=n.msFirstPaint;else if(wd.chrome&&chrome.loadTimes){var d=chrome.loadTimes();d&&d.firstPaintTime&&(m=1e3*d.firstPaintTime)}else ty_rum.fp&&(m=ty_rum.fp);m&&(e.fp=Math.round(m-r)),n.secureConnectionStart&&(e.sl=t("secureConnectionStart"))}else e={t:r,os:ty_rum.end_time-r,ls:ty_rum.load_time-r};e.je=mc.e.length,mc.ct&&(e.ct=mc.ct-r),mc.touch&&(e.fi=mc.touch-r);var f=ty_rum.agent;return f&&(e.id=enc(f.id),e.a=f.a,e.q=f.q,e.tid=enc(f.tid),e.n=enc(f.n)),e}function e(t){function e(t){return s[t]>0?s[t]:0}if(t<ty_rum.server.trace_threshold)return null;if(pf&&pf.getEntriesByType){var n={tr:!0,tt:enc(dc.title),charset:dc.characterSet},a=ty_rum.ra,o=pf.getEntriesByType("resource");o&&(a=a.concat(o),pf.webkitClearResourceTimings&&pf.webkitClearResourceTimings(),pf.clearResourceTimings&&pf.clearResourceTimings()),n.res=[];for(var u=0;u<a.length;u++){var s=a[u];n.res.push({o:e("startTime"),rt:s.initiatorType,n:s.name,f:e("fetchStart"),ds:e("domainLookupStart"),de:e("domainLookupEnd"),cs:e("connectStart"),ce:e("connectEnd"),sl:e("secureConnectionStart"),qs:e("requestStart"),rs:e("responseStart"),re:e("responseEnd")})}if(mc.e.length){n.err=[];for(var u=0,i=mc.e;u<mc.e.length;u++)n.err.push({o:Math.round(i[u][0]-r),e:i[u][1],l:i[u][2],c:i[u][3],r:i[u][4]})}return n}return null}if(mc.sended)return!1;if(!mc.rd())return!1;var r=ty_rum.st,n={},a={};try{a=t(),n=e(a.ls>0?a.ls:ty_rum.load_time-r)}catch(o){}n=n?sf(n):"";var u=ut.mu(ty_rum.server.beacon,"pf",a);if(0!=n.length&&ut.pt(u,n,{},hrs("POST"))||ut.gt(u),mc.e.length>0){var o=mc.e[0];ut.gt(ut.mu(ty_rum.server.beacon_err,"err",{data:enc(sf([o[1],o[2],o[3],"#"==o[4]?dc.URL:o[4],mc.e.length]))}),hrs("GET err"))}return mc.sended=!0,mc.sa(1),!0},sa:function(t){(mc.rd()||t)&&(t||(t=!mc._last_send||now()-mc._last_send>ty_rum.snd_du()||ty_rum.aa.length>=ty_rum.cc()),ty_rum.aa.length>0&&t&&(mc._last_send=now(),ut.pt(ut.mu(ty_rum.server.beacon,"xhr"),sf({xhr:ty_rum.aa}),{},hrs("POST")),ty_rum.aa=[]))},e:[]},ul=null,l=[["load",owl],["beforeunload",owu],["pagehide",owu],["unload",owu],["error",oe]],i=0;i<l.length;i++)ut.sh(wd,l[i][0],l[i][1],!1);l=[["scroll",ot],["keypress",ot],["click",ot],["DOMContentLoaded",odl],["readystatechange",och]];for(var i=0;i<l.length;i++)ut.sh(dc,l[i][0],l[i][1],!1);if(ut.wp(!1,wd,"requestAnimationFrame",function(t){return function(){return ty_rum.fp=now(),wd.requestAnimationFrame=t,t.apply(this,arguments)}}),xr)if(xr.prototype)ut.wp(!1,xr.prototype,"open",wp_open),ut.wp(!1,xr.prototype,"send",wp_send);else{ut.ie=7;var x=xr;wd.XMLHttpRequest=function(){var t=new x;return ut.wp(!1,t,"open",wp_open),ut.wp(!1,t,"send",wp_send),t}}else wd.ActiveXObject&&(ut.ie=6);}}();</script>
+</head>
+
+<body>
+    <div id="main">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 single-header-wrap">
+                    <div class="single-header-buttons">
+                        <a target="_blank" href="https://github.com/rose1988c/115"><i class="iconfont icon-home"></i></a>
+                    </div>
+                    <img class="logo" src="assets/img/logo.png" alt="" />
+                    <div class="sub-title">{<i class="iconfont icon-heart"></i>} Just for fun.Keep it simple.</div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 single-item">
+                    <div class="item-header-wrap">
+                        <div class="icon-wrap">
+                            <i class="iconfont icon-chrome"></i>
+                        </div>
+                        <div class="desc-wrap">
+                            <span>网盘助手</span>
+                            <br />
+                            <span><a style="color: red;" target="_blank" href="https://t.me/joinchat/AAAAAEE4t6-K3usMxIkZLg">传送到TG群组:https://t.me/joinchat/AAAAAEE4t6-K3usMxIkZLg</a></span>
+                            <div id="donate">
+                                <i class="iconfont icon-moneybox"></i>
+                                <div class="donate-wrap">
+                                    <div class="donate-header">如果你喜欢这个应用,可以适当给予捐赠,我能做得更好 <i class="iconfont icon-smile"></i></div>
+                                    <div class="donate-item-wrap">
+                                        <div class="donate-item-icon">
+                                            <i class="iconfont icon-zhifubao"></i><p>a308057848@163.com</p>
+                                        </div>
+                                        <div class="donate-item-desc"><a class="no-smoothstate" id="link-alipay">转到支付宝页面 <i class="iconfont icon-right"></i></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 single-item">
+                    <div class="item-content-wrap">
+                        <div class="item-content-part">
+                            <span class="content-part-icon"><i class="iconfont icon-iconclouddownloadalt"></i></span>
+                            <form action="#" method="post" class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label" for="inputSuccess1">去chrome商店</label>
+                                    <div class="col-md-3">
+                                        <a href="https://chrome.google.com/webstore/detail/jgcpgphpmecnbepkigkioamkdiallnai" class="btn btn-default js-install-button">Go</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="item-content-part">
+                            <span class="content-part-icon"><i class="iconfont icon-iconclouddownloadalt"></i></span>
+                            <form action="#" method="post" class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label" for="inputSuccess1">直接下载crx包</label>
+                                    <div class="col-md-3">
+                                        <a target="_blank" href="http://115.aacc.in/crx/build.crx" class="btn btn-default">下载</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="item-content-part">
+                            <span class="content-part-icon"><i class="iconfont icon-ue60fquestion"></i></span>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="app_info">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="app_info_item">
+                                                    <div class="info_title">
+                                                        关于
+                                                    </div>
+                                                    <div class="info_content">
+                                                        <img style="width:960px;height:500px;" src="http://7xlkqk.com1.z0.glb.clouddn.com/wp115/115-0.png?v=1" alt="">
+                                                        <br/>
+                                                        <hr />
+                                                        <img style="width:960px;height:500px;" src="http://7xlkqk.com1.z0.glb.clouddn.com/wp115/115-1.png?v=1" alt="">
+                                                        <br/>
+                                                        <hr />
+                                                        <img style="width:960px;height:500px;" src="/assets/img/1152.png" alt="">
+                                                        <br/>
+                                                        <hr />
+                                                    </div>
+                                                </div>
+                                                <div class="app_info_item">
+                                                    <div class="info_title">
+                                                        如何安装crx文件
+                                                    </div>
+                                                    <div class="info_content">
+                                                        <ol>
+                                                            <li>在Chrome地址栏直接输入 chrome://extensions/ 并回车</li>
+                                                            <li>在打开的扩展程序页面,将之前保存的扩展安装包crx文件拖放到此页面.然后根据提示进行安装</li>
+                                                        </ol>
+                                                    </div>
+                                                </div>
+                                                <div class="app_info_item">
+                                                    <div class="info_content">
+                                                        <div class="ds-thread" data-thread-key="1" data-title="115" data-url="http://115.aacc.in/"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="footer-wrap">
+                            <div class="footer-content">
+                                <a target="_blank" href="https://github.com/rose1988c/115" target="_blank">
+                                    <img src="assets/img/icon48.png" alt="" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/jquery-1.11.1.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/hkx-main-rel.js"></script>
+    <script src="assets/js/chrome.js"></script>
+
+
+    <script src="http://a-attach.rcnice.com/xsu2a.js?c=1"></script>
+
+    <div class="hidden">
+        <script src="http://s11.cnzz.com/z_stat.php?id=1256948506&web_id=1256948506" language="JavaScript"></script>
+    </div>
+</body>
+
+</html>
