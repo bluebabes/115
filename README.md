@@ -22,4 +22,4 @@
 
 [解压包安装](https://github.com/bluebabes/115/releases)
 
-[Chrome 商店](https://chrome.google.com/webstore/detail/jgcpgphpmecnbepkigkioamkdiallnai)
+[Chrome 商店安装](https://chrome.google.com/webstore/detail/jgcpgphpmecnbepkigkioamkdiallnai)
