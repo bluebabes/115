@@ -20,6 +20,12 @@
 
 ### 下载地址
 
+[Chrome 商店安装](https://chrome.google.com/webstore/detail/jgcpgphpmecnbepkigkioamkdiallnai)
+
 [解压包安装](https://github.com/bluebabes/115/releases)
 
-[Chrome 商店安装](https://chrome.google.com/webstore/detail/jgcpgphpmecnbepkigkioamkdiallnai)
+解压包安装步骤：
+
+1. 下载压缩包，并解压
+2. 浏览器打开 `chrome://extensions`，并搜索下 115 ，把旧版本都删除
+3. 点击打开开发者模式，之后点击按钮“加载已加压的压缩扩展程序”，完成
