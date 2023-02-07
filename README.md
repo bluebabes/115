@@ -39,4 +39,14 @@
 
    * 插件设置  aria2 开启开关
    * 通过点击115 页面的【文件首页】
+   
+3. 关于浏览器通知
+
+  mac 电脑，在“设置”里面搜索“通知”，找到 “对应浏览器”  选择 允许通知
+  
+  <img width="485" alt="image" src="https://user-images.githubusercontent.com/3329261/217266101-7d30bad8-4137-41cc-b171-7f9ab9bc623a.png">
+
+  <img width="481" alt="image" src="https://user-images.githubusercontent.com/3329261/217266193-a7825ee0-9f42-4119-bb31-46cbecf2366b.png">
+
+
 
