@@ -43,11 +43,22 @@
    
 3. 关于浏览器通知
 
+   没有通知可能的原因： 
+    * 勿扰模式
+    * 通知权限
+
+  通知权限：
   mac 电脑，在“设置”里面搜索“通知”，找到 “对应浏览器”  选择 允许通知
   
   <img width="485" alt="image" src="https://user-images.githubusercontent.com/3329261/217266101-7d30bad8-4137-41cc-b171-7f9ab9bc623a.png">
 
   <img width="481" alt="image" src="https://user-images.githubusercontent.com/3329261/217266193-a7825ee0-9f42-4119-bb31-46cbecf2366b.png">
 
+
+4. 本地播放，无法播放流
+
+  播放器设置 user-agent
+  
+  <img width="733" alt="image" src="https://user-images.githubusercontent.com/3329261/230605271-daff4257-fe6e-46d8-9d98-5ce7276d49fd.png">
 
 
