@@ -1,18 +1,861 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="115 离线下载插件，识别网页磁链、Hash 与文本链接，一键提交到 115 网盘，并支持 aria2 导出到 NAS 与远程下载环境。">
+  <meta name="keywords" content="115离线下载,磁力链接,aria2,NAS,Chrome插件">
+  <meta name="theme-color" content="#08110f">
+  <title>115 离线下载插件 | Magnet To Cloud</title>
+  <link rel="icon" href="themes/magnet/images/logo.svg">
+  <style>
+    :root {
+      --bg: #07100e;
+      --bg-soft: #0d1b18;
+      --panel: rgba(235, 255, 241, 0.07);
+      --panel-strong: rgba(235, 255, 241, 0.12);
+      --text: #edf8ef;
+      --muted: #94aaa0;
+      --line: rgba(207, 255, 221, 0.16);
+      --accent: #b6ff4d;
+      --accent-2: #00d6a3;
+      --warn: #ffcc66;
+      --ink: #06100d;
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+      --radius: 28px;
+    }
 
-<title>115离线插件</title>
+    * {
+      box-sizing: border-box;
+    }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      font-family: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(0, 214, 163, 0.24), transparent 31rem),
+        radial-gradient(circle at 86% 3%, rgba(182, 255, 77, 0.18), transparent 28rem),
+        linear-gradient(135deg, #07100e 0%, #0c1513 48%, #030806 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      content: "";
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: linear-gradient(to bottom, black, transparent 78%);
+    }
+
+    body::after {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      content: "";
+      background:
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0 1px, transparent 1px 5px),
+        linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.3));
+      mix-blend-mode: screen;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      padding: 18px 0;
+      backdrop-filter: blur(20px);
+      background: linear-gradient(180deg, rgba(7, 16, 14, 0.9), rgba(7, 16, 14, 0.62));
+      border-bottom: 1px solid rgba(207, 255, 221, 0.08);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+    }
+
+    .brand img {
+      width: 36px;
+      height: 36px;
+      padding: 7px;
+      background: #eaffd6;
+      border-radius: 12px;
+      box-shadow: 0 0 35px rgba(182, 255, 77, 0.38);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-links a {
+      padding: 10px 14px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      transition: 180ms ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--line);
+    }
+
+    .hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.04fr) minmax(320px, 0.96fr);
+      gap: 46px;
+      align-items: center;
+      padding: 96px 0 72px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: max-content;
+      max-width: 100%;
+      padding: 9px 13px;
+      color: #dfffe8;
+      font-size: 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .pulse {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 0 rgba(182, 255, 77, 0.64);
+      animation: ping 1.8s infinite;
+    }
+
+    @keyframes ping {
+      70%, 100% {
+        box-shadow: 0 0 0 14px rgba(182, 255, 77, 0);
+      }
+    }
+
+    h1 {
+      max-width: 860px;
+      margin: 24px 0 20px;
+      font-size: clamp(32px, 4vw, 54px);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-subtitle {
+      max-width: 760px;
+      margin: 0 0 18px;
+      color: #e6f6e7;
+      font-size: clamp(22px, 3vw, 38px);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.035em;
+    }
+
+    .hero-lead {
+      max-width: 680px;
+      margin: 0;
+      color: #bfd0c8;
+      font-size: clamp(17px, 2vw, 22px);
+      line-height: 1.72;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 20px;
+      font-weight: 800;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button.primary {
+      color: var(--ink);
+      background: linear-gradient(135deg, var(--accent), #f2ffba);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 18px 50px rgba(182, 255, 77, 0.24);
+    }
+
+    .button.secondary {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .button.secondary:hover {
+      border-color: rgba(182, 255, 77, 0.42);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .hero-meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 42px;
+    }
+
+    .metric {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.045);
+    }
+
+    .metric strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--accent);
+      font-size: 22px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .console-card {
+      position: relative;
+      padding: 22px;
+      border: 1px solid rgba(182, 255, 77, 0.24);
+      border-radius: 34px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.11), rgba(255,255,255,0.045)),
+        rgba(4, 12, 10, 0.76);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .console-card::before {
+      position: absolute;
+      inset: auto -20% -25% -20%;
+      height: 200px;
+      content: "";
+      background: radial-gradient(circle, rgba(0, 214, 163, 0.22), transparent 65%);
+      filter: blur(6px);
+    }
+
+    .console-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dots {
+      display: flex;
+      gap: 7px;
+    }
+
+    .dots i {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .dots i:nth-child(2) {
+      background: var(--warn);
+    }
+
+    .dots i:nth-child(3) {
+      background: var(--accent-2);
+    }
+
+    .pipeline {
+      position: relative;
+      display: grid;
+      gap: 14px;
+    }
+
+    .pipe-step {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 16px;
+      border: 1px solid rgba(207, 255, 221, 0.12);
+      border-radius: 20px;
+      background: rgba(1, 7, 5, 0.58);
+    }
+
+    .pipe-icon {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      color: var(--ink);
+      font-weight: 900;
+      border-radius: 14px;
+      background: var(--accent);
+    }
+
+    .pipe-step strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .pipe-step span,
+    .pipe-step code {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .pipe-step code {
+      padding: 5px 8px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 999px;
+    }
+
+    .progress {
+      height: 10px;
+      margin-top: 20px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.09);
+      overflow: hidden;
+    }
+
+    .progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent-2), var(--accent));
+      animation: load 2.8s ease-in-out infinite;
+    }
+
+    @keyframes load {
+      0% { width: 18%; transform: translateX(-20%); }
+      55% { width: 86%; transform: translateX(0); }
+      100% { width: 42%; transform: translateX(160%); }
+    }
+
+    section {
+      padding: 82px 0;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 30px;
+    }
+
+    .section-kicker {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      max-width: 720px;
+      margin: 0;
+      font-size: clamp(32px, 4.8vw, 58px);
+      line-height: 1.04;
+      letter-spacing: -0.055em;
+    }
+
+    .section-copy {
+      max-width: 420px;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.72;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .feature-card,
+    .install-card,
+    .faq-item {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset;
+    }
+
+    .feature-card {
+      min-height: 270px;
+      padding: 22px;
+      border-radius: var(--radius);
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(182, 255, 77, 0.35);
+      background: var(--panel-strong);
+    }
+
+    .feature-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      margin-bottom: 42px;
+      color: var(--ink);
+      font-weight: 900;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    }
+
+    .feature-card h3,
+    .install-card h3,
+    .faq-item h3 {
+      margin: 0 0 12px;
+      font-size: 22px;
+      letter-spacing: -0.025em;
+    }
+
+    .feature-card p,
+    .install-card p,
+    .faq-item p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.72;
+    }
+
+    .download-panel {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 28px;
+      align-items: center;
+      padding: clamp(26px, 5vw, 48px);
+      border: 1px solid rgba(182, 255, 77, 0.3);
+      border-radius: 36px;
+      background:
+        linear-gradient(135deg, rgba(182, 255, 77, 0.14), transparent 45%),
+        linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .download-panel::after {
+      position: absolute;
+      right: -70px;
+      top: -100px;
+      width: 260px;
+      height: 260px;
+      content: "";
+      border: 1px solid rgba(182, 255, 77, 0.36);
+      border-radius: 50%;
+      box-shadow: inset 0 0 70px rgba(182, 255, 77, 0.14);
+    }
+
+    .download-panel h2,
+    .download-panel p,
+    .download-actions {
+      position: relative;
+      z-index: 1;
+    }
+
+    .download-panel p {
+      max-width: 720px;
+      color: #c9d8d1;
+      line-height: 1.75;
+    }
+
+    .download-actions {
+      display: grid;
+      gap: 12px;
+      min-width: 230px;
+    }
+
+    .install-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      counter-reset: install;
+    }
+
+    .install-card {
+      position: relative;
+      min-height: 220px;
+      padding: 24px;
+      border-radius: var(--radius);
+    }
+
+    .install-card::before {
+      counter-increment: install;
+      content: "0" counter(install);
+      display: block;
+      margin-bottom: 46px;
+      color: rgba(182, 255, 77, 0.76);
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .faq-item {
+      padding: 22px;
+      border-radius: 24px;
+    }
+
+    .footer {
+      padding: 44px 0 54px;
+      color: var(--muted);
+      border-top: 1px solid rgba(207, 255, 221, 0.1);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      font-size: 14px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .footer a {
+      color: #dcebe3;
+    }
+
+    @media (max-width: 940px) {
+      .hero,
+      .download-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-grid,
+      .install-grid,
+      .faq-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .section-copy {
+        margin-top: 16px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .page {
+        width: min(100% - 28px, 1180px);
+      }
+
+      .topbar {
+        position: relative;
+      }
+
+      .nav {
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding: 52px 0 48px;
+      }
+
+      .hero-meta,
+      .feature-grid,
+      .install-grid,
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pipe-step {
+        grid-template-columns: auto 1fr;
+      }
+
+      .pipe-step code {
+        grid-column: 1 / -1;
+        width: max-content;
+      }
+
+      section {
+        padding: 54px 0;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <header class="topbar">
+    <nav class="page nav" aria-label="主导航">
+      <a class="brand" href="#top" aria-label="115 离线下载插件首页">
+        <img src="themes/magnet/images/logo.svg" alt="">
+        <span>115 Magnet Cloud</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">能力</a>
+        <a href="#download">下载</a>
+        <a href="#install">安装</a>
+        <a href="#faq">FAQ</a>
+        <a href="https://github.com/bluebabes/115" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </nav>
+  </header>
 
-    <script>
-        // window.location.href = "./themes/default/index.html";
-        window.location.href = "./themes/magnet/index.html";
-    </script>
+  <main id="top">
+    <section class="page hero" aria-labelledby="hero-title">
+      <div>
+        <div class="eyebrow"><span class="pulse"></span> Chrome Extension · Magnet To Cloud</div>
+        <h1 id="hero-title">115 离线下载插件</h1>
+        <p class="hero-subtitle">把磁链任务直接送进云端，把文件 Aria2 下载到 NAS 或本地。</p>
+        <p class="hero-lead">
+          自动识别网页磁力链接、Hash 与选中文本，右键即可提交到 115 网盘；同时支持 aria2 导出，让远程硬盘和本地播放器接上你的下载流。
+        </p>
+        <div class="hero-actions" aria-label="主要操作">
+          <a class="button primary" href="https://chrome.google.com/webstore/detail/115%E7%BD%91%E7%9B%98%E7%A6%BB%E7%BA%BF%E4%B8%8B%E8%BD%BD/jgcpgphpmecnbepkigkioamkdiallnai" target="_blank" rel="noreferrer">Chrome 商店安装</a>
+          <a class="button secondary" href="https://github.com/bluebabes/115/releases" target="_blank" rel="noreferrer">GitHub Releases</a>
+        </div>
+        <div class="hero-meta" aria-label="核心摘要">
+          <div class="metric">
+            <strong>Magnet</strong>
+            <span>网页磁链自动识别</span>
+          </div>
+          <div class="metric">
+            <strong>SHA1</strong>
+            <span>Hash 文本快速离线</span>
+          </div>
+          <div class="metric">
+            <strong>aria2</strong>
+            <span>导出到 NAS / 远程端</span>
+          </div>
+        </div>
+      </div>
 
+      <aside class="console-card" aria-label="离线流程示意">
+        <div class="console-head">
+          <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+          <span>offline-pipeline.log</span>
+        </div>
+        <div class="pipeline">
+          <div class="pipe-step">
+            <span class="pipe-icon">01</span>
+            <div>
+              <strong>扫描页面</strong>
+              <span>捕获 magnet、Hash 与可离线文本</span>
+            </div>
+            <code>detect</code>
+          </div>
+          <div class="pipe-step">
+            <span class="pipe-icon">02</span>
+            <div>
+              <strong>一键提交</strong>
+              <span>点击图标或右键菜单发送到 115</span>
+            </div>
+            <code>dispatch</code>
+          </div>
+          <div class="pipe-step">
+            <span class="pipe-icon">03</span>
+            <div>
+              <strong>导出下载</strong>
+              <span>把任务交给 aria2、NAS 或远程机器</span>
+            </div>
+            <code>export</code>
+          </div>
+        </div>
+        <div class="progress" aria-hidden="true"><span></span></div>
+      </aside>
+    </section>
+
+    <section id="features" class="page" aria-labelledby="features-title">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">Capabilities</p>
+          <h2 id="features-title">少点复制粘贴，多点自动化。</h2>
+        </div>
+        <p class="section-copy">围绕「发现链接 → 提交离线 → 导出下载」这条路径重做信息架构，核心能力一眼可见。</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <span class="feature-number">A</span>
+          <h3>磁链 / Hash 识别</h3>
+          <p>自动识别页面里的 magnet 链接、未带协议头的磁力文本，以及 SHA1 文本，减少手动整理。</p>
+        </article>
+        <article class="feature-card">
+          <span class="feature-number">B</span>
+          <h3>页面一键离线</h3>
+          <p>在识别到的链接旁加入快捷入口，点击即可把任务发送到 115 离线下载流程。</p>
+        </article>
+        <article class="feature-card">
+          <span class="feature-number">C</span>
+          <h3>右键文本离线</h3>
+          <p>选中网页中的 Hash 或磁力文本，使用浏览器右键菜单直接提交，不必新开页面。</p>
+        </article>
+        <article class="feature-card">
+          <span class="feature-number">D</span>
+          <h3>aria2 导出</h3>
+          <p>把 115 或夸克网盘任务导出给 aria2，适合 NAS、挂载硬盘和远程下载机。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="download" class="page" aria-labelledby="download-title">
+      <div class="download-panel">
+        <div>
+          <p class="section-kicker">Download</p>
+          <h2 id="download-title">选择稳定的安装方式。</h2>
+          <p>优先使用 Chrome 商店安装；如果商店不可用，可以从 GitHub Releases 获取压缩包并手动加载。新版 Chrome 通常建议加载解压后的扩展目录，而不是直接拖入 CRX。</p>
+        </div>
+        <div class="download-actions">
+          <a class="button primary" href="https://chrome.google.com/webstore/detail/115%E7%BD%91%E7%9B%98%E7%A6%BB%E7%BA%BF%E4%B8%8B%E8%BD%BD/jgcpgphpmecnbepkigkioamkdiallnai" target="_blank" rel="noreferrer">Chrome 商店安装</a>
+          <a class="button secondary" href="https://github.com/bluebabes/115/releases" target="_blank" rel="noreferrer">GitHub Releases</a>
+          <a class="button secondary" href="crx/115/build.zip">本地 ZIP 包</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="install" class="page" aria-labelledby="install-title">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">Install</p>
+          <h2 id="install-title">手动安装，只需要三步。</h2>
+        </div>
+        <p class="section-copy">如果你下载的是 ZIP 包，请按浏览器扩展的开发者模式流程加载。</p>
+      </div>
+      <div class="install-grid">
+        <article class="install-card">
+          <h3>下载并解压</h3>
+          <p>从 GitHub Releases 或本地 ZIP 包下载插件，解压到一个固定目录，后续不要随意删除。</p>
+        </article>
+        <article class="install-card">
+          <h3>打开扩展页面</h3>
+          <p>在地址栏输入 <strong>chrome://extensions/</strong>，打开右上角「开发者模式」。</p>
+        </article>
+        <article class="install-card">
+          <h3>加载扩展目录</h3>
+          <p>点击「加载已解压的扩展程序」，选择刚才解压出来的文件夹，完成安装。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="faq" class="page" aria-labelledby="faq-title">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">FAQ</p>
+          <h2 id="faq-title">常见问题。</h2>
+        </div>
+        <p class="section-copy">把 README 中的关键排障信息前置，用户不用翻文档也能先解决高频问题。</p>
+      </div>
+      <div class="faq-grid">
+        <article class="faq-item">
+          <h3>明明付费了，却一直显示非会员？</h3>
+          <p>先检查系统时间是否准确，时间偏差可能影响会员状态识别与接口校验。</p>
+        </article>
+        <article class="faq-item">
+          <h3>115 页面没有导出按钮？</h3>
+          <p>确认插件设置里已经开启 aria2 开关，然后尝试点击 115 页面里的「文件首页」刷新入口。</p>
+        </article>
+        <article class="faq-item">
+          <h3>浏览器通知没有出现？</h3>
+          <p>检查系统勿扰模式、浏览器通知权限，以及当前浏览器是否被系统允许发送通知。</p>
+        </article>
+        <article class="faq-item">
+          <h3>本地播放器无法播放流？</h3>
+          <p>在播放器里配置对应 user-agent，再重新尝试播放下载流。</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="page footer-inner">
+      <span>© 2013-<span id="year">2026</span> 115 离线下载插件 · Built for magnet workflows.</span>
+      <div class="footer-links">
+        <a href="https://github.com/bluebabes/115" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="README.md">README</a>
+        <a href="#download">下载</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
-
 </html>
