@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>隐私政策 — 115网盘离线下载</title>
+  <meta name="description" content="115网盘离线下载 Chrome 扩展的隐私政策，说明数据收集、使用方式及用户权利。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand:        #1a73e8;
+      --brand-dark:   #0d47a1;
+      --brand-light:  #e8f0fe;
+      --success:      #188038;
+      --warn:         #f9a825;
+      --danger:       #c62828;
+      --text-primary: #1a1a2e;
+      --text-sec:     #4b5563;
+      --text-muted:   #9ca3af;
+      --border:       #e5e7eb;
+      --bg:           #f8fafc;
+      --card:         #ffffff;
+      --radius:       12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.75;
+      font-size: 15px;
+    }
+
+    a { color: var(--brand); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ===== Layout ===== */
+    .page-wrap {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      grid-template-rows: auto 1fr auto;
+      grid-template-areas:
+        "hdr  hdr"
+        "nav  main"
+        "ftr  ftr";
+      min-height: 100vh;
+    }
+
+    /* ===== Hero Header ===== */
+    .hero {
+      grid-area: hdr;
+      background: linear-gradient(135deg, #1a73e8 0%, #0d3b8c 60%, #091e42 100%);
+      color: #fff;
+      padding: 56px 48px 52px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.05);
+      top: -200px; right: -100px;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.04);
+      bottom: -100px; left: 200px;
+    }
+    .hero-inner { position: relative; z-index: 1; max-width: 760px; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      margin-bottom: 18px;
+      backdrop-filter: blur(4px);
+    }
+    .hero h1 {
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -.3px;
+    }
+    .hero-sub {
+      font-size: 14px;
+      opacity: .8;
+      max-width: 560px;
+    }
+    .hero-meta {
+      margin-top: 22px;
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .hero-meta span {
+      font-size: 13px;
+      opacity: .75;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hero-meta strong { opacity: 1; font-weight: 600; }
+
+    /* ===== Sidebar Nav ===== */
+    .sidebar {
+      grid-area: nav;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 32px 20px;
+      border-right: 1px solid var(--border);
+      background: var(--card);
+      overflow-y: auto;
+    }
+    .sidebar-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      padding-left: 12px;
+    }
+    .nav-list { list-style: none; }
+    .nav-list li + li { margin-top: 2px; }
+    .nav-list a {
+      display: block;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-sec);
+      transition: all .15s;
+    }
+    .nav-list a:hover,
+    .nav-list a.active {
+      background: var(--brand-light);
+      color: var(--brand);
+      text-decoration: none;
+    }
+
+    /* ===== Main Content ===== */
+    main {
+      grid-area: main;
+      padding: 48px 56px 64px;
+      max-width: 840px;
+    }
+
+    /* Section card */
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 36px;
+      margin-bottom: 28px;
+      scroll-margin-top: 24px;
+      transition: box-shadow .2s;
+    }
+    .section:hover { box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+
+    .section-num {
+      display: inline-block;
+      background: var(--brand);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 2px 8px;
+      margin-bottom: 10px;
+    }
+    .section h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--brand-light);
+    }
+    .section h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 22px 0 10px;
+    }
+    p { color: var(--text-sec); margin-bottom: 12px; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ===== Alert boxes ===== */
+    .alert {
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      gap: 12px;
+      margin: 16px 0;
+      font-size: 13.5px;
+    }
+    .alert-icon { font-size: 18px; flex-shrink: 0; line-height: 1.4; }
+    .alert-body { color: var(--text-sec); }
+    .alert-body strong { display: block; margin-bottom: 4px; }
+    .alert-warn  { background: #fff8e1; border-left: 4px solid var(--warn); }
+    .alert-info  { background: #e8f0fe; border-left: 4px solid var(--brand); }
+    .alert-ok    { background: #e6f4ea; border-left: 4px solid var(--success); }
+
+    /* ===== Data table ===== */
+    .data-table-wrap { overflow-x: auto; margin: 16px 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    th {
+      background: var(--brand-light);
+      color: var(--brand-dark);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid #c5d8fd;
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      color: var(--text-sec);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f0f5ff; }
+
+    /* ===== Tag badges ===== */
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 12px;
+      white-space: nowrap;
+    }
+    .tag-r { background: #fce4ec; color: #b71c1c; }
+    .tag-o { background: #e8f5e9; color: #1b5e20; }
+    .tag-n { background: #f5f5f5; color: #616161; }
+
+    /* ===== List styles ===== */
+    ul.check-list, ul.circle-list { list-style: none; }
+    ul.check-list li {
+      position: relative;
+      padding-left: 24px;
+      color: var(--text-sec);
+      margin-bottom: 8px;
+    }
+    ul.check-list li::before {
+      content: '✓';
+      position: absolute; left: 0;
+      color: var(--brand);
+      font-weight: 700;
+    }
+    ul.circle-list li {
+      position: relative;
+      padding-left: 20px;
+      color: var(--text-sec);
+      margin-bottom: 8px;
+    }
+    ul.circle-list li::before {
+      content: '•';
+      position: absolute; left: 0;
+      color: var(--brand);
+      font-weight: 700;
+    }
+
+    /* ===== Timeline ===== */
+    .timeline { border-left: 2px solid var(--border); padding-left: 20px; }
+    .timeline-item { position: relative; margin-bottom: 16px; }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -27px; top: 5px;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--brand);
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 2px var(--brand);
+    }
+    .timeline-item strong { display: block; font-size: 14px; font-weight: 600; }
+    .timeline-item span { font-size: 13px; color: var(--text-muted); }
+
+    /* ===== Contact card ===== */
+    .contact-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: linear-gradient(135deg, #e8f0fe, #f0f5ff);
+      border: 1px solid #c5d8fd;
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-top: 16px;
+    }
+    .contact-icon { font-size: 32px; }
+    .contact-body h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .contact-body p { font-size: 13px; color: var(--text-sec); margin: 0; }
+    .contact-body a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      background: var(--brand);
+      color: #fff;
+      padding: 6px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background .15s;
+    }
+    .contact-body a:hover { background: var(--brand-dark); text-decoration: none; }
+
+    /* ===== Footer ===== */
+    footer {
+      grid-area: ftr;
+      border-top: 1px solid var(--border);
+      padding: 20px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      background: var(--card);
+    }
+    footer a { color: var(--text-muted); }
+    footer a:hover { color: var(--brand); }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .page-wrap {
+        grid-template-columns: 1fr;
+        grid-template-areas: "hdr" "main" "ftr";
+      }
+      .sidebar { display: none; }
+      .hero { padding: 36px 24px; }
+      main { padding: 24px 20px; }
+      footer { padding: 16px 20px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- ===== Hero Header ===== -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">🔐 隐私政策</div>
+      <h1>115网盘离线下载 — 隐私政策</h1>
+      <p class="hero-sub">
+        我们非常重视您的隐私。本文档详细说明本插件收集哪些数据、为何收集、如何保护，以及您拥有哪些权利。
+      </p>
+      <div class="hero-meta">
+        <span>📅 <strong>生效日期：</strong>2026年04月14日</span>
+        <span>🔄 <strong>最近更新：</strong>2026年04月14日</span>
+        <span>📌 <strong>版本：</strong>v1.0</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Sidebar ===== -->
+  <nav class="sidebar">
+    <p class="sidebar-label">目录</p>
+    <ul class="nav-list">
+      <li><a href="#s1">1. 基本信息</a></li>
+      <li><a href="#s2">2. 我们收集的数据</a></li>
+      <li><a href="#s3">3. Cookie 使用说明</a></li>
+      <li><a href="#s4">4. 数据使用目的</a></li>
+      <li><a href="#s5">5. 数据共享与披露</a></li>
+      <li><a href="#s6">6. 数据存储与安全</a></li>
+      <li><a href="#s7">7. 您的权利</a></li>
+      <li><a href="#s8">8. 未成年人保护</a></li>
+      <li><a href="#s9">9. 政策变更</a></li>
+      <li><a href="#s10">10. 联系我们</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== Main Content ===== -->
+  <main>
+
+    <!-- 重要提示 -->
+    <div class="alert alert-warn">
+      <span class="alert-icon">⚠️</span>
+      <div class="alert-body">
+        <strong>首次使用前请阅读</strong>
+        本插件在您明确同意之前，不会收集任何可选数据。继续使用本插件即表示您同意本隐私政策所述内容。
+        如不同意，请卸载本插件。
+      </div>
+    </div>
+
+    <!-- 1. 基本信息 -->
+    <section class="section" id="s1">
+      <span class="section-num">01</span>
+      <h2>基本信息</h2>
+      <p>
+        <strong>插件名称：</strong>115网盘离线下载<br />
+        <strong>开发者：</strong>Magnet To Cloud 团队<br />
+        <strong>主页：</strong><a href="https://115.aacc.in" target="_blank">https://115.aacc.in</a><br />
+        <strong>适用平台：</strong>Google Chrome / Microsoft Edge（Chromium）<br />
+        <strong>问题反馈：</strong><a href="https://github.com/bluebabes/115/issues" target="_blank">GitHub Issues</a>
+      </p>
+      <p>
+        本隐私政策适用于上述 Chrome 扩展程序的所有版本。本政策描述我们如何收集、使用和保护通过该插件获取的信息，
+        以及您作为用户所享有的权利。
+      </p>
+      <div class="alert alert-info">
+        <span class="alert-icon">ℹ️</span>
+        <div class="alert-body">
+          <strong>适用范围</strong>
+          本政策仅适用于本 Chrome 扩展插件本身，不适用于您访问的 115 网盘、夸克网盘等第三方平台。
+          这些平台有各自独立的隐私政策。
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 我们收集的数据 -->
+    <section class="section" id="s2">
+      <span class="section-num">02</span>
+      <h2>我们收集的数据</h2>
+      <p>
+        我们对所收集的数据分为两类：<strong>必要数据</strong>（核心功能所需，无需单独授权）和
+        <strong>可选数据</strong>（需要您明确同意后才会收集）。
+      </p>
+
+      <div class="data-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>数据类型</th>
+              <th>类别</th>
+              <th>收集方式</th>
+              <th>是否上传外部服务器</th>
+              <th>保留期限</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>115 网盘 Cookie</td>
+              <td><span class="tag tag-r">必要</span></td>
+              <td>从浏览器 Cookie 存储读取</td>
+              <td>❌ 仅转发至 115 官方 API 接口，插件服务器不存储</td>
+              <td>仅会话期间，不持久化</td>
+            </tr>
+            <tr>
+              <td>夸克网盘 Cookie</td>
+              <td><span class="tag tag-r">必要</span></td>
+              <td>从浏览器 Cookie 存储读取</td>
+              <td>❌ 仅转发至夸克官方 API 接口</td>
+              <td>仅会话期间，不持久化</td>
+            </tr>
+            <tr>
+              <td>账号 UID</td>
+              <td><span class="tag tag-o">可选</span></td>
+              <td>从 115 网盘登录状态获取</td>
+              <td>✅ 上传至 115.aacc.in（仅用于会员验证，加密传输）</td>
+              <td>您撤回授权后 30 天内删除</td>
+            </tr>
+            <tr>
+              <td>用户名 / 头像 URL</td>
+              <td><span class="tag tag-o">可选</span></td>
+              <td>从 115 网盘登录状态获取</td>
+              <td>✅ 上传至 115.aacc.in（用于界面展示，加密传输）</td>
+              <td>您撤回授权后 30 天内删除</td>
+            </tr>
+            <tr>
+              <td>离线磁力链接摘要</td>
+              <td><span class="tag tag-o">可选</span></td>
+              <td>用户主动触发离线下载时提取</td>
+              <td>✅ 上传至 115.aacc.in（匿名，用于公共资源索引）</td>
+              <td>长期保留（匿名，不含个人信息）</td>
+            </tr>
+            <tr>
+              <td>插件版本号</td>
+              <td><span class="tag tag-n">系统</span></td>
+              <td>从 manifest 自动读取</td>
+              <td>✅ 随账号数据一并上传，用于版本兼容性管理</td>
+              <td>同账号数据</td>
+            </tr>
+            <tr>
+              <td>浏览器 User-Agent</td>
+              <td><span class="tag tag-n">系统</span></td>
+              <td>从 navigator.userAgent 读取</td>
+              <td>❌ 仅在本地使用，不上传</td>
+              <td>存储于本地 chrome.storage.local</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert alert-ok">
+        <span class="alert-icon">✅</span>
+        <div class="alert-body">
+          <strong>我们不收集</strong>
+          浏览记录、搜索历史、地理位置、设备标识符（IDFA/GAID）、支付信息，以及任何与插件功能无关的个人敏感信息。
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Cookie 使用说明 -->
+    <section class="section" id="s3">
+      <span class="section-num">03</span>
+      <h2>Cookie 使用说明</h2>
+      <p>
+        本插件在 <code>manifest.json</code> 中声明了 <code>cookies</code> 权限。以下是我们读取 Cookie 的具体场景：
+      </p>
+
+      <h3>🍪 为何需要读取 Cookie</h3>
+      <ul class="check-list">
+        <li>
+          <strong>115 网盘 Cookie</strong>：调用 115 网盘离线下载 API（<code>uplb.115.com</code>）时，
+          需携带登录 Cookie 进行身份验证，这是 115 网盘 API 的强制要求。
+        </li>
+        <li>
+          <strong>夸克网盘 Cookie</strong>：调用夸克网盘 Aria2 导出 API 时，需携带对应的登录 Cookie。
+        </li>
+      </ul>
+
+      <h3>🔒 Cookie 的处理方式</h3>
+      <ul class="check-list">
+        <li>Cookie 从浏览器本地读取，<strong>仅在本地内存中处理</strong>，不写入任何数据库。</li>
+        <li>Cookie 值仅被转发至对应平台的官方 API 地址，<strong>绝不发送至插件开发者的服务器</strong>。</li>
+        <li>插件不会修改、删除或创建任何 Cookie。</li>
+        <li>读取范围仅限于 <code>*.115.com</code>、<code>*.quark.cn</code>、<code>*.terabox.app</code> 等在 <code>host_permissions</code> 中明确声明的域。</li>
+      </ul>
+
+      <div class="alert alert-warn">
+        <span class="alert-icon">⚠️</span>
+        <div class="alert-body">
+          <strong>重要说明</strong>
+          本插件不使用广告 Cookie、跨站追踪 Cookie，也不会在您访问的网站上注入任何追踪脚本。
+          <code>cookies</code> 权限的唯一使用目的是获取已登录账户的身份凭证以完成离线下载。
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 数据使用目的 -->
+    <section class="section" id="s4">
+      <span class="section-num">04</span>
+      <h2>数据使用目的</h2>
+      <p>我们收集上述数据的目的如下：</p>
+
+      <h3>核心功能（必要数据）</h3>
+      <ul class="check-list">
+        <li>将磁力链接、SHA1 哈希链接提交至 115 网盘进行离线下载</li>
+        <li>通过 Aria2 接口导出 115/夸克/Terabox 网盘下载任务</li>
+        <li>读取网盘目录结构以选择下载路径</li>
+      </ul>
+
+      <h3>增值服务（可选数据，需您授权）</h3>
+      <ul class="check-list">
+        <li><strong>会员资格验证</strong>：通过账号 UID 验证您是否为插件付费会员，以开放 Aria2 等高级功能</li>
+        <li><strong>个性化服务</strong>：在插件界面展示您的用户名和头像</li>
+        <li><strong>资源索引</strong>：将您成功离线的磁力链接（仅哈希摘要，不含文件内容）同步至公共索引，供其他用户秒传使用</li>
+        <li><strong>服务改进</strong>：通过汇总统计分析（匿名）改善产品体验</li>
+      </ul>
+    </section>
+
+    <!-- 5. 数据共享与披露 -->
+    <section class="section" id="s5">
+      <span class="section-num">05</span>
+      <h2>数据共享与披露</h2>
+      <p>我们不会出售、出租或以任何方式向第三方商业共享您的个人数据。</p>
+      <p>仅在以下有限情形下，我们可能披露数据：</p>
+
+      <ul class="circle-list">
+        <li>
+          <strong>法律要求</strong>：当法律法规、政府命令或法院要求我们披露信息时，
+          我们将依法配合，但会尽力提前通知您（除非被法律禁止）。
+        </li>
+        <li>
+          <strong>安全保护</strong>：当我们合理相信披露数据有助于调查欺诈、保护用户或公众安全时。
+        </li>
+        <li>
+          <strong>技术服务商</strong>：插件官方服务器（<code>115.aacc.in</code>）的托管服务商，
+          仅有权访问提供技术服务所必需的数据，并受保密义务约束。
+        </li>
+      </ul>
+
+      <div class="data-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>接收方</th>
+              <th>接收的数据类型</th>
+              <th>法律依据</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>115 网盘官方 API</td>
+              <td>115 网盘 Cookie、离线URL、用户UID</td>
+              <td>提供离线下载核心服务所必要</td>
+            </tr>
+            <tr>
+              <td>夸克网盘官方 API</td>
+              <td>夸克网盘 Cookie</td>
+              <td>提供 Aria2 导出功能所必要</td>
+            </tr>
+            <tr>
+              <td>115.aacc.in（插件服务器）</td>
+              <td>账号 UID、用户名、磁力摘要（需授权）</td>
+              <td>用户明确同意</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 6. 数据存储与安全 -->
+    <section class="section" id="s6">
+      <span class="section-num">06</span>
+      <h2>数据存储与安全</h2>
+
+      <h3>本地存储</h3>
+      <p>
+        插件配置（Aria2 地址、播放器设置、通知配置等）存储于浏览器的
+        <code>chrome.storage.local</code>，数据只存在于您的本地设备，
+        其他网站和扩展无法访问。
+      </p>
+
+      <h3>服务器存储</h3>
+      <ul class="check-list">
+        <li>传输采用 <strong>HTTPS/TLS 1.2+</strong> 加密</li>
+        <li>账号标识数据在静态存储时采用 AES 加密</li>
+        <li>服务器访问日志保留 90 天后自动清除</li>
+        <li>定期进行安全审计和渗透测试</li>
+      </ul>
+
+      <h3>安全措施</h3>
+      <ul class="check-list">
+        <li>插件遵循 Chrome 扩展最小权限原则，仅申请功能必需的权限</li>
+        <li>Content Security Policy（CSP）配置为 <code>script-src 'self'</code>，防止 XSS 攻击</li>
+        <li>不在代码中硬编码任何密钥或凭证</li>
+      </ul>
+
+      <div class="alert alert-warn">
+        <span class="alert-icon">⚠️</span>
+        <div class="alert-body">
+          互联网上没有绝对安全的数据传输方式。我们会采取行业标准的保护措施，
+          但无法对数据安全做出百分之百的保证。如果您发现安全漏洞，
+          请通过 <a href="https://github.com/bluebabes/115/issues" target="_blank">GitHub Issues</a> 向我们负责任地披露。
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. 您的权利 -->
+    <section class="section" id="s7">
+      <span class="section-num">07</span>
+      <h2>您的权利</h2>
+      <p>根据适用法律，您享有以下权利：</p>
+
+      <div class="data-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>权利</th>
+              <th>说明</th>
+              <th>如何行使</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>🔍 知情权</td>
+              <td>了解我们收集哪些数据及用途</td>
+              <td>阅读本隐私政策；查看插件设置页「数据与隐私」Tab</td>
+            </tr>
+            <tr>
+              <td>✅ 同意权</td>
+              <td>决定是否授权可选数据收集</td>
+              <td>首次使用时在同意弹窗中确认；或在设置页重新授权</td>
+            </tr>
+            <tr>
+              <td>🔄 撤回权</td>
+              <td>随时撤回对可选数据收集的授权</td>
+              <td>设置页 → 数据与隐私 → 点击「撤回授权」按钮</td>
+            </tr>
+            <tr>
+              <td>📋 访问权</td>
+              <td>请求获取我们持有的关于您的数据</td>
+              <td>通过 <a href="https://github.com/bluebabes/115/issues" target="_blank">GitHub Issues</a> 提交请求</td>
+            </tr>
+            <tr>
+              <td>🗑️ 删除权</td>
+              <td>请求删除我们存储的您的数据</td>
+              <td>撤回授权后数据将在 30 天内删除；或主动提交删除请求</td>
+            </tr>
+            <tr>
+              <td>🚪 退出权</td>
+              <td>随时停止使用并卸载插件</td>
+              <td>在 Chrome 扩展管理页面（chrome://extensions）卸载</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert alert-ok">
+        <span class="alert-icon">✅</span>
+        <div class="alert-body">
+          <strong>撤回授权不影响核心功能</strong>
+          撤回对可选数据收集的授权后，离线下载、Aria2 导出等核心功能不受任何影响。仅会员验证相关功能可能受限。
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. 未成年人保护 -->
+    <section class="section" id="s8">
+      <span class="section-num">08</span>
+      <h2>未成年人保护</h2>
+      <p>
+        本插件不面向 14 岁以下的未成年人。我们不会故意收集未成年人的个人信息。
+        如果我们发现在未获得可核实的父母同意的情况下收集了未成年人的信息，
+        将立即删除这些信息。
+      </p>
+      <p>
+        如果您是未成年人的父母或监护人，并发现您的子女在未经授权的情况下使用了本插件，
+        请通过下方联系方式与我们联系。
+      </p>
+    </section>
+
+    <!-- 9. 政策变更 -->
+    <section class="section" id="s9">
+      <span class="section-num">09</span>
+      <h2>政策变更</h2>
+      <p>
+        我们可能会不时更新本隐私政策。发生重大变更时，我们将通过以下方式通知您：
+      </p>
+      <ul class="circle-list">
+        <li>在插件更新时通过 Chrome 通知系统发送提示</li>
+        <li>在插件设置页顶部展示醒目的变更提示</li>
+        <li>在 <a href="https://github.com/bluebabes/115/issues" target="_blank">GitHub Issues</a> 发布变更公告</li>
+      </ul>
+      <p>
+        继续使用本插件即表示您接受更新后的政策。我们建议您定期查阅本页面以了解最新内容。
+      </p>
+
+      <h3>📋 变更历史</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <strong>v1.0 — 2026年04月14日</strong>
+          <span>隐私政策初始版本发布，新增用户同意机制和数据与隐私管理页面</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. 联系我们 -->
+    <section class="section" id="s10">
+      <span class="section-num">10</span>
+      <h2>联系我们</h2>
+      <p>
+        如果您对本隐私政策有任何疑问、意见或数据请求，请通过以下方式联系我们。
+        我们将在 <strong>15 个工作日内</strong>回复您的请求。
+      </p>
+
+      <div class="contact-card">
+        <div class="contact-icon">🐛</div>
+        <div class="contact-body">
+          <h4>问题反馈 / 数据请求</h4>
+          <p>通过 GitHub Issues 提交您的问题、隐私数据访问或删除请求</p>
+          <a href="https://github.com/bluebabes/115/issues" target="_blank">
+            前往 GitHub Issues →
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-card" style="margin-top:12px;">
+        <div class="contact-icon">🌐</div>
+        <div class="contact-body">
+          <h4>插件主页</h4>
+          <p>访问插件官方主页，获取最新版本和使用文档</p>
+          <a href="https://115.aacc.in" target="_blank">
+            访问 115.aacc.in →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <span>© 2026 Magnet To Cloud · 115网盘离线下载</span>
+    <span>
+      本文档最后更新于 2026年04月14日 ·
+      <a href="https://github.com/bluebabes/115/issues" target="_blank">问题反馈</a> ·
+      <a href="https://115.aacc.in" target="_blank">主页</a>
+    </span>
+  </footer>
+
+</div>
+
+<script>
+  // 侧边栏高亮当前可见的章节
+  const sections = document.querySelectorAll('section[id]')
+  const navLinks = document.querySelectorAll('.nav-list a')
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id)
+        })
+      }
+    })
+  }, { rootMargin: '-20% 0px -70% 0px' })
+
+  sections.forEach(s => observer.observe(s))
+</script>
+</body>
+</html>
