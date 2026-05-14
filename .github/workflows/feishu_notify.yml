@@ -1,0 +1,19 @@
+name: Feishu Issue Notify
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Notification
+        run: |
+          curl -X POST '${{ secrets.FEISHU_WEBHOOK_URL }}' \
+          -H 'Content-Type: application/json' \
+          -d '{
+            "msg_type": "text",
+            "content": {
+              "text": "📢 新 Issue 通知\n标题: ${{ github.event.issue.title }}\n作者: ${{ github.event.issue.user.login }}\n链接: ${{ github.event.issue.html_url }}"
+            }
+          }'
